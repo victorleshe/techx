@@ -1,5 +1,18 @@
-import bot from './assets/bot.svg';
-import user from './assets/user.svg';
+function chatStripe(isAi, value, uniqueId) {
+  return `
+        <div class="wrapper ${isAi && 'ai'}">
+            <div class="chat">
+                <div class="profile">
+                    <img
+                      src="${isAi ? './assets/bot.png' : './assets/user.png'}"
+                      alt="${isAi ? 'bot' : 'user'}"
+                    />
+                </div>
+                <div class="message" id=${uniqueId}>${value}</div>
+            </div>
+        </div>
+    `;
+}
 
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
@@ -42,22 +55,6 @@ function generateUniqueId() {
   const hexadecimalString = randomNumber.toString(16);
 
   return `id-${timestamp}-${hexadecimalString}`;
-}
-
-function chatStripe(isAi, value, uniqueId) {
-  return `
-        <div class="wrapper ${isAi && 'ai'}">
-            <div class="chat">
-                <div class="profile">
-                    <img 
-                      src=${isAi ? bot : user} 
-                      alt="${isAi ? 'bot' : 'user'}" 
-                    />
-                </div>
-                <div class="message" id=${uniqueId}>${value}</div>
-            </div>
-        </div>
-    `;
 }
 
 const handleSubmit = async (e) => {
@@ -114,5 +111,30 @@ form.addEventListener('submit', handleSubmit);
 form.addEventListener('keyup', (e) => {
   if (e.keyCode === 13) {
     handleSubmit(e);
+  }
+});
+
+const body = document.querySelector('body'),
+  sidebar = body.querySelector('nav'),
+  toggle = body.querySelector('.toggle'),
+  searchBtn = body.querySelector('.search-box'),
+  modeSwitch = body.querySelector('.toggle-switch'),
+  modeText = body.querySelector('.mode-text');
+
+toggle.addEventListener('click', () => {
+  sidebar.classList.toggle('close');
+});
+
+searchBtn.addEventListener('click', () => {
+  sidebar.classList.remove('close');
+});
+
+modeSwitch.addEventListener('click', () => {
+  body.classList.toggle('dark');
+
+  if (body.classList.contains('dark')) {
+    modeText.innerText = 'Light mode';
+  } else {
+    modeText.innerText = 'Dark mode';
   }
 });
